@@ -8,7 +8,7 @@
 #else
 #include <SdFat.h>
 #endif
-#include <TMRpcm.h>
+#include <TMRpcm-LiM.h>
 
 #if !defined(RF_ONLY)
 
@@ -499,6 +499,7 @@ void TMRpcm::precisePlay(char* filename, unsigned long seekPosition) {
         return;
     }  // verify its a valid wav file
 
+    // MODIFIED PART
     if (seekPosition > 0) {
         seekPosition += fPosition();
         seek(seekPosition);  // skip the header info
@@ -599,12 +600,12 @@ void TMRpcm::precisePlay(char* filename, unsigned long seekPosition) {
 }
 
 void TMRpcm::precisePlay(char* filename, float startingSecond) {
-    unsigned long seekPosition = (SAMPLE_RATE * startingSecond) + fPosition();
+    unsigned long seekPosition = (unsigned long)(SAMPLE_RATE * startingSecond);
     precisePlay(filename, seekPosition);
 }
 
 void TMRpcm::play(char* filename, unsigned long seekPoint) {
-    seekPoint = (SAMPLE_RATE * seekPoint) + fPosition();
+    seekPoint *= SAMPLE_RATE;
     precisePlay(filename, seekPoint);
 }
 
